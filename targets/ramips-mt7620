@@ -1,4 +1,11 @@
+# ASUS
+if [ "$BROKEN" ]; then
+device asus-rt-ac51u rt-ac51u # BROKEN: no 5GHz usable, LEDs not fully supported
+factory
+fi
+
 # GL Innovations
+
 device gl-mt300a gl-mt300a
 factory
 
@@ -7,3 +14,10 @@ factory
 
 device gl-mt750 gl-mt750
 factory
+
+# Nexx
+
+device nexx-wt3020-8m wt3020-8M
+alias nexx-wt3020ad
+alias nexx-wt3020f
+alias nexx-wt3020h

@@ -8,7 +8,7 @@ Gluon's releases are managed using `Git tags`_. If you are just getting
 started with Gluon we recommend to use the latest stable release of Gluon.
 
 Take a look at the `list of gluon releases`_ and notice the latest release,
-e.g. *v2018.1.1*. Always get Gluon using git and don't try to download it
+e.g. *v2018.2*. Always get Gluon using git and don't try to download it
 as a Zip archive as the archive will be missing version information.
 
 Please keep in mind that there is no "default Gluon" build; a site configuration
@@ -19,13 +19,13 @@ an old site configuration to a newer release of Gluon.
 
 An example configuration can be found in the Gluon repository at *docs/site-example/*.
 
-.. _Git tags: http://git-scm.com/book/en/Git-Basics-Tagging
+.. _Git tags: https://git-scm.com/book/en/v2/Git-Basics-Tagging
 .. _list of gluon releases: https://github.com/freifunk-gluon/gluon/releases
 
 Dependencies
 ------------
 To build Gluon, several packages need to be installed on the system. On a
-freshly installed Debian Wheezy system the following packages are required:
+freshly installed Debian Stretch system the following packages are required:
 
 * `git` (to get Gluon and other dependencies)
 * `subversion`
@@ -44,7 +44,7 @@ Building the images
 -------------------
 
 To build Gluon, first check out the repository. Replace *RELEASE* with the
-version you'd like to checkout, e.g. *v2018.1.1*.
+version you'd like to checkout, e.g. *v2018.2*.
 
 ::
 
