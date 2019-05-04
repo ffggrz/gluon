@@ -4,7 +4,6 @@ local function config_error(src, ...)
 	error(src .. ' error: ' .. string.format(...), 0)
 end
 
-
 local has_domains = (os.execute('ls -d "$IPKG_INSTROOT"/lib/gluon/domains/ >/dev/null 2>&1') == 0)
 
 
@@ -66,8 +65,20 @@ local function path_to_string(path)
 	return table.concat(path, '.')
 end
 
+local function format(val)
+	if type(val) == 'string' then
+		return string.format('%q', val)
+	else
+		return tostring(val)
+	end
+end
+
 local function array_to_string(array)
-	return '[' .. table.concat(array, ', ') .. ']'
+	local strings = {}
+	for i, v in ipairs(array) do
+		strings[i] = format(v)
+	end
+	return '[' .. table.concat(strings, ', ') .. ']'
 end
 
 function table_keys(tbl)
@@ -89,11 +100,7 @@ local function domain_src()
 	return 'domains/' .. domain_code .. '.conf'
 end
 
-local function var_error(path, val, msg)
-	if type(val) == 'string' then
-		val = string.format('%q', val)
-	end
-
+local function conf_src(path)
 	local src
 
 	if has_domains then
@@ -108,14 +115,17 @@ local function var_error(path, val, msg)
 		src = site_src()
 	end
 
-	local found = 'unset'
-	if val ~= nil then
-		found = string.format('%s (a %s value)', tostring(val), type(val))
-	end
-
-	config_error(src, 'expected %s to %s, but it is %s', path_to_string(path), msg, found)
+	return src
 end
 
+local function var_error(path, val, msg)
+	local found = 'unset'
+	if val ~= nil then
+		found = string.format('%s (a %s value)', format(val), type(val))
+	end
+
+	config_error(conf_src(path), 'expected %s to %s, but it is %s', path_to_string(path), msg, found)
+end
 
 function in_site(path)
 	if has_domains and loadpath(nil, domain, unpack(path)) ~= nil then
@@ -200,6 +210,33 @@ function alternatives(...)
 	error(table.concat(errs, '\n        '), 0)
 end
 
+
+local function check_chanlist(channels)
+	local is_valid_channel = check_one_of(channels)
+	return function(chanlist)
+		for group in chanlist:gmatch("%S+") do
+			if group:match("^%d+$") then
+				channel = tonumber(group)
+				if not is_valid_channel(channel) then
+					return false
+				end
+			elseif group:match("^%d+-%d+$") then
+				from, to = group:match("^(%d+)-(%d+)$")
+				from = tonumber(from)
+				to = tonumber(to)
+				if from >= to then
+					return false
+				end
+				if not is_valid_channel(from) or not is_valid_channel(to) then
+					return false
+				end
+			else
+				return false
+			end
+		end
+		return true
+	end
+end
 
 function need(path, check, required, msg)
 	local val = loadvar(path)
@@ -305,6 +342,12 @@ function need_array_of(path, array, required)
 	return need_array(path, function(e) need_one_of(e, array) end, required)
 end
 
+function need_chanlist(path, channels, required)
+	local valid_chanlist = check_chanlist(channels)
+	return need(path, valid_chanlist, required, 'be a space-separated list of WiFi channels or channel-ranges (separated by a hyphen). ' .. 
+	'Valid channels are: ' .. array_to_string(channels))
+end
+
 function need_domain_name(path)
 	need_string(path)
 	need(path, function(domain_name)
@@ -313,6 +356,20 @@ function need_domain_name(path)
 		f:close()
 		return true
 	end, nil, 'be a valid domain name')
+end
+
+function obsolete(path, msg)
+	local val = loadvar(path)
+	if val == nil then
+		return nil
+	end
+
+	if not msg then
+		msg = 'Check the release notes and documentation for details.'
+
+	end
+
+	config_error(conf_src(path), '%s is obsolete. %s', path_to_string(path), msg)
 end
 
 local check = assert(loadfile())

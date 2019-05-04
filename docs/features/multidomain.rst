@@ -160,8 +160,6 @@ site.conf only variables
    in a domain specific way:
 
    -  mesh_vpn.fastd.syslog_level
-   -  wifi*.supported_rates
-   -  wifi*.basic_rates
    -  timezone
    -  regdom
 
@@ -193,8 +191,8 @@ domain.conf only variables
    -  prefix4
    -  extra_prefixes6
 
--  To prevent accidential bridging of different domains, all meshing
-   technologies should be seperated:
+-  To prevent accidental bridging of different domains, all meshing
+   technologies should be separated:
 
    -  domain_seed (wired mesh)
 

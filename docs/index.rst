@@ -1,8 +1,8 @@
 Welcome to Gluon
 ================
 
-Gluon is a modular framework for creating OpenWrt-based firmwares for wireless mesh nodes.
-Several Freifunk communities in Germany use Gluon as the foundation of their Freifunk firmwares.
+Gluon is a modular framework for creating OpenWrt-based firmware images for wireless mesh nodes.
+Several Freifunk communities in Germany use Gluon as the foundation of their Freifunk firmware.
 
 
 .. toctree::
@@ -71,6 +71,7 @@ Several Freifunk communities in Germany use Gluon as the foundation of their Fre
    :caption: Releases
    :maxdepth: 1
 
+   releases/v2018.2.1
    releases/v2018.2
    releases/v2018.1.4
    releases/v2018.1.3
@@ -148,6 +149,7 @@ ar71xx-generic
 
 * D-Link
 
+  - DAP-1330 (A1)
   - DIR-505 (A1, A2)
   - DIR-825 (B1)
 
@@ -223,7 +225,7 @@ ar71xx-generic
   - Loco M2/M5 XW
   - Nanostation M2/M5
   - Nanostation M2/M5 XW
-  - Picostation M2/M5
+  - Picostation M2
   - Rocket M2/M5
   - Rocket M2/M5 Ti
   - Rocket M2/M5 XW
@@ -284,10 +286,11 @@ ar71xx-tiny
   - TL-WA7210N (v2)
   - TL-WA7510N (v1)
   - TL-WR703N (v1)
-  - TL-WR710N (v1, v2, v2.1)
+  - TL-WR710N (v2)
   - TL-WR740N (v1, v3, v4, v5)
   - TL-WR741N/ND (v1, v2, v4, v5)
   - TL-WR743N/ND (v1, v2)
+  - TL-WR840N (v2)
   - TL-WR841N/ND (v3, v5, v7, v8, v9, v10, v11, v12)
   - TL-WR843N/ND (v1)
   - TL-WR940N (v1, v2, v3, v4, v5, v6)
@@ -329,13 +332,6 @@ ipq40xx
 
   - NBG6617 [#80211s]_
   - WRE6606 [#80211s]_
-
-ipq806x
-^^^^^^^
-
-* TP-Link
-
-  - Archer C2600 [#80211s]_
 
 mpc85xx-generic
 ^^^^^^^^^^^^^^^
@@ -408,8 +404,8 @@ ramips-rt305x
 
   - VoCore (8M, 16M) [#80211s]_
 
-sunxi
-^^^^^
+sunxi-cortexa7
+^^^^^^^^^^^^^^
 
 * LeMaker
 

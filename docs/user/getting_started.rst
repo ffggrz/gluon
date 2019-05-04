@@ -8,7 +8,7 @@ Gluon's releases are managed using `Git tags`_. If you are just getting
 started with Gluon we recommend to use the latest stable release of Gluon.
 
 Take a look at the `list of gluon releases`_ and notice the latest release,
-e.g. *v2018.2*. Always get Gluon using git and don't try to download it
+e.g. *v2018.2.1*. Always get Gluon using git and don't try to download it
 as a Zip archive as the archive will be missing version information.
 
 Please keep in mind that there is no "default Gluon" build; a site configuration
@@ -44,7 +44,7 @@ Building the images
 -------------------
 
 To build Gluon, first check out the repository. Replace *RELEASE* with the
-version you'd like to checkout, e.g. *v2018.2*.
+version you'd like to checkout, e.g. *v2018.2.1*.
 
 ::
 
@@ -172,7 +172,7 @@ GLUON_PRIORITY
 GLUON_REGION
   Some devices (at the moment the TP-Link Archer C7) contain a region code that restricts
   firmware installations. Set GLUON_REGION to ``eu`` or ``us`` to make the resulting
-  images installable from the respective stock firmwares.
+  images installable from the respective stock firmware.
 
 GLUON_RELEASE
   Firmware release number: This string is displayed in the config mode, announced
@@ -186,8 +186,15 @@ GLUON_TARGET
 Special variables
 .................
 
-GLUON_BUILDDIR
-  Working directory during build. Defaults to ``build``.
+GLUON_DEBUG
+  Setting ``GLUON_DEBUG=1`` will provide firmware images including debugging symbols usable with GDB or
+  similar tools. Requires a device or target with at least 16 MB of flash space, e.g. `x86-64`. Unset by default.
+
+GLUON_DEVICES
+  List of devices to build. The list contains the Gluon profile name of a device, the profile
+  name is the first parameter of the ``device`` command in a target file.
+  e.g. ``GLUON_DEVICES="avm-fritz-box-4020 tp-link-tl-wdr4300-v1"``.
+  Empty by default to build all devices of a target.
 
 GLUON_IMAGEDIR
   Path where images will be stored. Defaults to ``$(GLUON_OUTPUTDIR)/images``.

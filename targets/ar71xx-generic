@@ -17,7 +17,7 @@ factory
 
 # ALFA NETWORK
 
-device alfa-network-ap121f ap121f ap121f
+device alfa-network-ap121f ap121f
 factory
 
 device alfa-network-hornet-ub hornet-ub HORNETUB
@@ -36,7 +36,7 @@ factory
 
 # AVM
 
-device avm-fritz-box-4020 fritz4020 fritz4020
+device avm-fritz-box-4020 fritz4020
 factory
 
 device avm-fritz-wlan-repeater-300e fritz300e
@@ -61,6 +61,9 @@ sysupgrade_image buffalo-wzr-hp-ag300h-wzr-600dhp wzr-hp-ag300h-squashfs-sysupgr
 
 
 # D-Link
+
+device d-link-dap-1330-rev-a1 dap-1330-a1
+factory .img
 
 device d-link-dir-505-rev-a1 dir-505-a1 DIR505A1
 alias d-link-dir-505-rev-a2
