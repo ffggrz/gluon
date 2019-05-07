@@ -24,16 +24,13 @@ local pubkey
 local msg
 
 
-if has_fastd or has_tunneldigger then
-	if not fastd_enabled then
-		if not tunneldigger_enabled then
-			msg = site_i18n._translate('gluon-config-mode:novpn')
-		end
-	end
-end
 if has_fastd and fastd_enabled then
 	pubkey = util.trim(util.exec("/etc/init.d/fastd show_key mesh_vpn"))
 	msg = site_i18n._translate('gluon-config-mode:pubkey')
+elseif has_tunneldigger and tunneldigger_enabled then
+	msg = site_i18n._translate('gluon-config-mode:nokey')
+else
+	msg = site_i18n._translate('gluon-config-mode:novpn')
 end
 
 if not msg then return end
