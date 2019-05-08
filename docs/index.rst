@@ -70,6 +70,9 @@ Several Freifunk communities in Germany use Gluon as the foundation of their Fre
    :caption: Releases
    :maxdepth: 1
 
+   releases/v2018.1.4
+   releases/v2018.1.3
+   releases/v2018.1.2
    releases/v2018.1.1
    releases/v2018.1
    releases/v2017.1.8
@@ -285,13 +288,6 @@ brcm2708-bcm2709
 ^^^^^^^^^^^^^^^^
 
 * RaspberryPi 2
-
-ipq806x
-^^^^^^^
-
-* TP-Link
-
-  - Archer C2600 [#80211s]_
 
 mpc85xx-generic
 ^^^^^^^^^^^^^^^
