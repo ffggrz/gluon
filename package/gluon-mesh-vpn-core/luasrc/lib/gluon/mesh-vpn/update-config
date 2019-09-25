@@ -9,9 +9,13 @@ local has_fastd = unistd.access('/lib/gluon/mesh-vpn/fastd')
 local has_tunneldigger = unistd.access('/lib/gluon/mesh-vpn/tunneldigger')
 if has_fastd then
 	local methods = uci:get('fastd', 'mesh_vpn', 'method')
-	if util.contains(methods, 'null') then
-		if has_tunneldigger then
-			vpn = 'tunneldigger'
+	if methods then
+		if util.contains(methods, 'null') then
+			if has_tunneldigger then
+				vpn = 'tunneldigger'
+			else
+				vpn = 'fastd'
+			end
 		else
 			vpn = 'fastd'
 		end

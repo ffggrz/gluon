@@ -40,42 +40,32 @@ uci:save('firewall')
 
 -- VPN migration
 if not uci:get('gluon', 'mesh_vpn') then
-	local vpn
-	local has_fastd = unistd.access('/lib/gluon/mesh-vpn/fastd')
-	local has_tunneldigger = unistd.access('/lib/gluon/mesh-vpn/tunneldigger')
-	if has_fastd then
-		local methods = uci:get('fastd', 'mesh_vpn', 'method')
-		if util.contains(methods, 'null') then
-			if has_tunneldigger then
-				vpn = 'tunneldigger'
-			else
-				vpn = 'fastd'
-			end
-		else
-			vpn = 'fastd'
-		end
-	elseif has_tunneldigger then
-		vpn = 'tunneldigger'
-	end
-
 	local fastd_enabled = uci:get('fastd', 'mesh_vpn', 'enabled')
 	local tunneldigger_enabled = uci:get('tunneldigger', 'mesh_vpn', 'enabled')
 
+	-- Migration Gera-Greiz from gluon-web-mesh-vpn-select to standard gluon-web-mesh-vpn-fastd
+	if tunneldigger_enabled == '1' then
+		local methods = {}
+		table.insert(methods, 'null')
+		for _, method in ipairs(site.mesh_vpn.fastd.methods()) do
+			if method ~= 'null' then
+				table.insert(methods, method)
+			end
+		end
+		uci:set('fastd', 'mesh_vpn', 'method', methods)
+		uci:save('fastd')
+		uci:commit('fastd')
+	end
+
 	local enabled
 
-	-- If the installed VPN package has its enabled state set, keep the value
-	if vpn == 'fastd' and fastd_enabled then
-		enabled = fastd_enabled == '1'
-	elseif vpn == 'tunneldigger' and tunneldigger_enabled then
-		enabled = tunneldigger_enabled == '1'
-	-- Otherwise, migrate the other package's value if any is set
-	elseif fastd_enabled or tunneldigger_enabled then
+	-- If any of the VPN package has its enabled state set, keep the value
+	if fastd_enabled or tunnelgigger_enabled then
 		enabled = fastd_enabled == '1' or tunneldigger_enabled == '1'
 	-- If nothing is set, use the default
 	else
 		enabled = site.mesh_vpn.enabled(false)
 	end
-
 
 	local limit_enabled = tonumber((uci:get('simple-tc', 'mesh_vpn', 'enabled')))
 	if limit_enabled == nil then
