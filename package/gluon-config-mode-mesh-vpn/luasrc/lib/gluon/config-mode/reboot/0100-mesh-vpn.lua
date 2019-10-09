@@ -11,11 +11,9 @@ local util = require "gluon.util"
 local pretty_hostname = require 'pretty_hostname'
 
 
-
 local has_fastd = unistd.access('/lib/gluon/mesh-vpn/fastd')
 local has_tunneldigger = unistd.access('/lib/gluon/mesh-vpn/tunneldigger')
-local fastd_enabled = uci:get_bool("fastd", "mesh_vpn", "enabled")
-local tunneldigger_enabled = uci:get_bool("tunneldigger", "mesh_vpn", "enabled")
+
 
 local hostname = pretty_hostname.get(uci)
 local contact = uci:get_first("gluon-node-info", "owner", "contact")
@@ -24,16 +22,19 @@ local pubkey
 local msg
 
 
-if has_fastd or has_tunneldigger then
-	if not fastd_enabled then
-		if not tunneldigger_enabled then
-			msg = site_i18n._translate('gluon-config-mode:novpn')
-		end
+if has_tunneldigger then
+	local tunneldigger_enabled = uci:get_bool("tunneldigger", "mesh_vpn", "enabled")
+	if not tunneldigger_enabled then
+		msg = site_i18n._translate('gluon-config-mode:novpn')
 	end
-end
-if has_fastd and fastd_enabled then
-	pubkey = util.trim(util.exec("/etc/init.d/fastd show_key mesh_vpn"))
-	msg = site_i18n._translate('gluon-config-mode:pubkey')
+elseif has_fastd then
+	local fastd_enabled = uci:get_bool("fastd", "mesh_vpn", "enabled")
+	if fastd_enabled then
+		pubkey = util.trim(util.exec("/etc/init.d/fastd show_key mesh_vpn"))
+		msg = site_i18n._translate('gluon-config-mode:pubkey')
+	else
+		msg = site_i18n._translate('gluon-config-mode:novpn')
+	end
 end
 
 if not msg then return end
