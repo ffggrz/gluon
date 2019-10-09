@@ -2,13 +2,30 @@
 
 local uci = require('simple-uci').cursor()
 local unistd = require 'posix.unistd'
+local util = require 'gluon.util'
 
 local vpn
-if unistd.access('/lib/gluon/mesh-vpn/fastd') then
-	vpn = 'fastd'
-elseif unistd.access('/lib/gluon/mesh-vpn/tunneldigger') then
+local has_fastd = unistd.access('/lib/gluon/mesh-vpn/fastd')
+local has_tunneldigger = unistd.access('/lib/gluon/mesh-vpn/tunneldigger')
+if has_fastd then
+	local methods = uci:get('fastd', 'mesh_vpn', 'method')
+	if methods then
+		if util.contains(methods, 'null') then
+			if has_tunneldigger then
+				vpn = 'tunneldigger'
+			else
+				vpn = 'fastd'
+			end
+		else
+			vpn = 'fastd'
+		end
+	else
+		vpn = 'fastd'
+	end
+elseif has_tunneldigger then
 	vpn = 'tunneldigger'
 end
+
 
 local vpn_config = {
 	enabled = uci:get_bool('gluon', 'mesh_vpn', 'enabled'),
