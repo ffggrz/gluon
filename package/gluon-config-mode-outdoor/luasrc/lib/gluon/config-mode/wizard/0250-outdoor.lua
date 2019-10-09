@@ -1,5 +1,5 @@
 return function(form, uci)
-        local platform_info = require 'gluon.platform'
+        local platform_info = require 'platform_info'
 
 	if not platform_info.is_outdoor_device() then
 		-- only visible on wizard for outdoor devices
