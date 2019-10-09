@@ -163,6 +163,8 @@ wifi24 \: optional
          },
        },
 
+.. _user-site-wifi5:
+
 wifi5 \: optional
     Same as `wifi24` but for the 5Ghz radio.
 
@@ -224,7 +226,8 @@ mesh
     Gluon generally segments layer-2 meshes so that each node becomes IGMP/MLD
     querier for its own local clients. This is necessary for reliable multicast
     snooping. The segmentation is realized by preventing IGMP/MLD queries from
-    passing through the mesh.
+    passing through the mesh. See also
+    :ref:`gluon-mesh-batman-adv <igmp-mld-domain-segmentation>` for details.
 
     By default, not only queries are filtered, but also membership report and
     leave packets, as they add to the background noise of the mesh. As a
@@ -238,8 +241,15 @@ mesh
     In addition, options specific to the batman-adv routing protocol can be set
     in the *batman_adv* section:
 
-    The optional value *routing_algo* allows to set up ``BATMAN_V`` based meshes. 
-    If unset, the routing algorithm will default to ``BATMAN_IV``.
+    The mandatory value *routing_algo* selects the batman-adv protocol variant.
+    The following values are supported:
+
+    - ``BATMAN_IV_LEGACY`` (*mesh-batman-adv-14*)
+    - ``BATMAN_IV`` (*mesh-batman-adv-15*)
+    - ``BATMAN_V`` (*mesh-batman-adv-15*)
+
+    When both *mesh-batman-adv-14* and *mesh-batman-adv-15* are included, this
+    setting specifies which one to use.
 
     The optional value *gw_sel_class* sets the gateway selection class, the
     default is ``20`` for B.A.T.M.A.N. IV and ``5000`` kbit/s for B.A.T.M.A.N. V.
@@ -249,11 +259,11 @@ mesh
       both, the TQ and the announced bandwidth.
     - **B.A.T.M.A.N. V:** with the value ``1500`` the gateway is selected if the
       throughput is at least 1500 kbit/s faster than the throughput of the
-      currently selected gateway. 
+      currently selected gateway.
 
     For details on determining the threshold, when to switch to a new gateway,
     see `batctl manpage`_, section "gw_mode".
-    
+
     .. _batctl manpage: https://www.open-mesh.org/projects/batman-adv/wiki/Gateways
 
     ::
@@ -508,11 +518,26 @@ setup_mode \: package
         skip = true,
       },
 
+.. _user-site-build-configuration:
+
 Build configuration
 -------------------
 
 The ``site.mk`` is a Makefile which defines various values
 involved in the build process of Gluon.
+
+GLUON_DEPRECATED
+    Controls whether images for deprecated devices should be built. The following
+    values are supported:
+
+    - ``0``: Do not build any images for deprecated devices.
+    - ``upgrade``: Only build sysupgrade images for deprecated devices.
+    - ``full``: Build both sysupgrade and factory images for deprecated devices.
+
+    Usually, devices are deprecated because their flash size is insufficient to
+    support future Gluon versions. The recommended setting is ``0`` for new sites,
+    and ``upgrade`` for existing configurations (where upgrades for existing
+    deployments of low-flash devices are required).
 
 GLUON_FEATURES
     Defines a list of features to include. The feature list is used to generate

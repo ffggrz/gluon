@@ -1,5 +1,4 @@
 local iwinfo = require 'iwinfo'
-local site = require 'gluon.site'
 local uci = require("simple-uci").cursor()
 local util = require 'gluon.util'
 
@@ -137,7 +136,7 @@ if has_5ghz_radio() then
 
 		local ht = r:option(ListValue, 'outdoor_htmode', translate('HT Mode') .. ' (' .. radio .. ')')
 		ht:depends(outdoor, true)
-		ht.default = uci.get('gluon', 'wireless', 'outdoor_' .. radio .. '_htmode') or 'default'
+		ht.default = uci:get('gluon', 'wireless', 'outdoor_' .. radio .. '_htmode') or 'default'
 
 		ht:value('default', translate("(default)"))
 		for mode, available in pairs(iwinfo.nl80211.htmodelist(phy)) do
@@ -158,7 +157,7 @@ end
 
 function f:write()
 	uci:commit('gluon')
-	os.execute('/lib/gluon/upgrade/200-wireless') 
+	os.execute('/lib/gluon/upgrade/200-wireless')
 	uci:commit('wireless')
 end
 

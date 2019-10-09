@@ -1,7 +1,7 @@
 return function(form, uci)
-        local platform_info = require 'platform_info'
+	local platform = require 'gluon.platform'
 
-	if not platform_info.is_outdoor_device() then
+	if not platform.is_outdoor_device() then
 		-- only visible on wizard for outdoor devices
 		return
 	end
@@ -13,6 +13,7 @@ return function(form, uci)
 		.. "to comply with local frequency regulations."
 	))
 
+	local outdoor_mode = uci:get_bool('gluon', 'wireless', 'outdoor')
 	local outdoor = section:option(Flag, 'outdoor', pkg_i18n.translate("Node will be installed outdoors"))
 	outdoor.default = outdoor_mode
 
